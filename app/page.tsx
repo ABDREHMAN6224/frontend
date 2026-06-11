@@ -4,8 +4,18 @@ import { useCallback, useEffect, useState } from "react";
 import { Header } from "@/components/mockup/Header";
 import { HistoryBar } from "@/components/mockup/HistoryBar";
 import { ControlPanel, useControlPanelDefaults } from "@/components/mockup/ControlPanel";
+import { ResultsGrid } from "@/components/mockup/ResultsGrid";
 import { fetchHistory, generateContent } from "@/lib/api";
+import { DEFAULT_PROMPT, MODELS, buildDefaultResultItems } from "@/lib/constants";
 import type { GenerateResponse, HistoryItem, MediaType } from "@/lib/types";
+
+const initialResult: GenerateResponse = {
+  id: "default",
+  prompt: DEFAULT_PROMPT,
+  model: MODELS[0],
+  type: "image",
+  items: buildDefaultResultItems(8),
+};
 
 export default function Home() {
   const defaults = useControlPanelDefaults();
@@ -16,7 +26,7 @@ export default function Home() {
   const [aspectRatio, setAspectRatio] = useState(defaults.aspectRatio);
   const [model, setModel] = useState<string>(defaults.model);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [result, setResult] = useState<GenerateResponse | null>(null);
+  const [result, setResult] = useState<GenerateResponse>(initialResult);
 
   useEffect(() => {
     fetchHistory().then(setHistory).catch(console.error);
@@ -37,7 +47,10 @@ export default function Home() {
         setHistory((prev) => [
           {
             id: response.id,
-            thumbnailUrl: response.items[0].url,
+            thumbnailUrl:
+              response.type === "image"
+                ? response.items[0].url
+                : `https://picsum.photos/seed/${response.id}/200/200`,
             type: response.type,
           },
           ...prev,
@@ -55,7 +68,7 @@ export default function Home() {
       <Header />
       <div className="space-y-4 py-4">
         <HistoryBar items={history} />
-        <main className="mx-auto flex max-w-[1400px] flex-col gap-6 px-4 sm:px-6 lg:flex-row lg:px-8">
+        <main className="mx-auto flex max-w-[1400px] flex-col gap-6 px-4 sm:px-6 lg:flex-row lg:items-start lg:px-8">
           <ControlPanel
             prompt={prompt}
             mediaType={mediaType}
@@ -70,15 +83,12 @@ export default function Home() {
             onModelChange={setModel}
             onGenerate={handleGenerate}
           />
-          <div className="min-w-0 flex-1">
-            {result ? (
-              <p className="text-sm text-muted">
-                Generated {result.items.length} {result.type}(s) — results grid coming next.
-              </p>
-            ) : (
-              <p className="text-sm text-muted">Enter a prompt and click Generate to create content.</p>
-            )}
-          </div>
+          <ResultsGrid
+            result={isGenerating ? null : result}
+            isLoading={isGenerating}
+            skeletonCount={count}
+            className="min-w-0 flex-1"
+          />
         </main>
       </div>
     </div>

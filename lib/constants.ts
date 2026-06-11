@@ -18,6 +18,16 @@ export const IMAGE_COUNTS = [1, 2, 4, 8] as const;
 export const ASPECT_RATIOS = ["1:1", "4:3", "3:4", "16:9", "9:16"] as const;
 export const MODELS = ["Flux Pro", "DALL-E 3", "Stable Diffusion XL", "Midjourney v6"] as const;
 
+export const PORTRAIT_SEED = "portrait-redhead-woman";
+
+export function buildDefaultResultItems(count = 8) {
+  return Array.from({ length: count }, (_, i) => ({
+    id: `default-${i}`,
+    url: `https://picsum.photos/seed/${PORTRAIT_SEED}-${i}/480/640`,
+    type: "image" as const,
+  }));
+}
+
 export const ASPECT_RATIO_DIMENSIONS: Record<string, { w: number; h: number }> = {
   "1:1": { w: 512, h: 512 },
   "4:3": { w: 640, h: 480 },
