@@ -43,6 +43,12 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/alt"
+            className="hidden rounded-full bg-surface px-3 py-1.5 text-xs font-medium text-primary shadow-sm transition-colors hover:bg-panel-tint md:inline-block"
+          >
+            Studio
+          </Link>
           <button
             type="button"
             className="hidden items-center gap-1.5 rounded-full bg-surface px-3 py-1.5 text-sm text-primary shadow-sm transition-colors hover:bg-panel-tint sm:flex"
