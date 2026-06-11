@@ -23,7 +23,11 @@ export default function Home() {
     <div className="min-h-screen bg-cream transition-colors duration-200">
       <Header />
       <div className="space-y-4 py-4">
-        <HistoryBar items={gen.history} />
+        <HistoryBar
+          items={gen.history}
+          activeId={gen.activeHistoryId}
+          onItemSelect={gen.loadFromHistory}
+        />
         <main className="mx-auto flex max-w-[1400px] flex-col gap-6 px-4 sm:px-6 lg:flex-row lg:items-start lg:px-8">
           <ControlPanel
             prompt={gen.prompt}

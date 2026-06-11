@@ -57,41 +57,26 @@ export function ResultsGrid({
   }
 
   const altBase = result.prompt.slice(0, 80);
-  const firstRow = result.items.slice(0, 4);
-  const secondRowMedia = result.items.slice(4);
 
   return (
-    <div
-      className={cn(
-        "grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
-        className,
-      )}
-      aria-label="Generated results"
-    >
-      {firstRow.map((item, i) => (
-        <ResultMedia
-          key={item.id}
-          item={item}
-          alt={`${altBase} — variation ${i + 1}`}
-          priority={i < 2}
-          className="animate-fade-in-up"
-        />
-      ))}
-
+    <div className={cn("flex flex-col gap-4", className)} aria-label="Generated results">
       <PromptCard
         prompt={result.prompt}
         model={result.model}
         className="animate-fade-in-up"
       />
 
-      {secondRowMedia.map((item, i) => (
-        <ResultMedia
-          key={item.id}
-          item={item}
-          alt={`${altBase} — variation ${i + 5}`}
-          className="animate-fade-in-up"
-        />
-      ))}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {result.items.map((item, i) => (
+          <ResultMedia
+            key={item.id}
+            item={item}
+            alt={`${altBase} — variation ${i + 1}`}
+            priority={i < 2}
+            className="animate-fade-in-up"
+          />
+        ))}
+      </div>
     </div>
   );
 }

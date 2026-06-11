@@ -4,6 +4,9 @@ export type HistoryItem = {
   id: string;
   thumbnailUrl: string;
   type: MediaType;
+  prompt: string;
+  model: string;
+  items: MediaItem[];
 };
 
 export type GenerateRequest = {
